@@ -1,0 +1,2 @@
+To access console use link - http://localhost:8080/h2-console
+U will get the endpoint detail and database name from console like -  H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
