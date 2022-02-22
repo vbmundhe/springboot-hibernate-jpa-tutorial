@@ -6,9 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +26,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 //An entity represents a table stored in a database. Every instance of an entity represents a row in the table.
 @Entity
 // course_detail table will be created
@@ -34,6 +38,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 						@NamedQuery(name = "getSpringMvcCourses", query = " SELECT c from CourseEntity c where c.name like '%Spring Mvc%'")
 						}
 				)
+// Let say course will not change frequently.  Make sure you are using javax.persistence.Cacheable instead of spring
+// Use hibernat's Secondary cache
+@Cacheable 
 public class CourseEntity {
 	// this will indicate as primary key
 	@Id
@@ -45,19 +52,15 @@ public class CourseEntity {
 
 	// Here review is maintaining the relationship && Mapping column will be created
 	// in review table
-	@OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
 	private List<Review> reviews = new ArrayList<>();
 
 	// Here student is maintaining the relationship so STUDENT_COURSES table will be created. 
 	// We are saying this column is mapped by the student's courses field
 	
-	//@ManyToMany(mappedBy = "courses" , cascade = CascadeType.)
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "COURSE_STUDENT", 
-		joinColumns = @JoinColumn(name = "COURSE_ID",	foreignKey = @ForeignKey(name = "course_tb_foreign_key")), 
-		inverseJoinColumns = @JoinColumn(name = "STUDENT_ID", foreignKey = @ForeignKey(name = "student_tb_foreign_key"))
-			)
+	@ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
 	// join column for student is STUDENT_ID and inverse join column is COURSE_ID
+	@JsonIgnore
 	private Set<Student> students = new HashSet<>();
 
 	@CreationTimestamp

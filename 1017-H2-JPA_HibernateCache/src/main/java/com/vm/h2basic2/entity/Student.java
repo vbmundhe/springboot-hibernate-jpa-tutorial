@@ -51,12 +51,10 @@ public class Student {
 	//	       foreign key (student_id) 
 	//	       references student
 
-//	@ManyToMany
-//	@JoinTable(name = "STUDENT_COURSE", 
-//		joinColumns = @JoinColumn(name = "STUDENT_ID",	foreignKey = @ForeignKey(name = "student_tb_foreign_key")), 
-//		inverseJoinColumns = @JoinColumn(name = "COURSE_ID", foreignKey = @ForeignKey(name = "course_tb_foreign_key")))
-	// join column for student is STUDENT_ID and inverse join column is COURSE_ID
-	@ManyToMany(mappedBy = "students", cascade = CascadeType.ALL) 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "STUDENT_COURSE", 
+		joinColumns = @JoinColumn(name = "STUDENT_ID",	foreignKey = @ForeignKey(name = "student_tb_foreign_key")), 
+		inverseJoinColumns = @JoinColumn(name = "COURSE_ID", foreignKey = @ForeignKey(name = "course_tb_foreign_key")))
 	private Set<CourseEntity> courses = new HashSet<>();
 
 	// @OneToOne // this will EAGER [default]

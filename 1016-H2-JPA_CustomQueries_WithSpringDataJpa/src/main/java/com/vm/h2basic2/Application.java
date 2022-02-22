@@ -62,11 +62,16 @@ public class Application implements CommandLineRunner {
 		displayAllCourses("\n\n=======================Custom Find findByNameOrderByIdDesc :",
 				courseSpringDataRepository.findByNameOrderByIdDesc("AWS associate course"));
 		
-		displayAllCourses("\n\n=======================Custom Find deleteByName = java :", courseSpringDataRepository.deleteByName("JAVA"));
-		courseSpringDataRepository.flush();
 		
-		//displayAllCourses("Result of deleteAllSpringCoreCourses  :", courseSpringDataRepository.deleteAllSpringCoreCourses());
-		courseSpringDataRepository.flush();
+		// its not good way to delete as below.
+		// Good way: Add remove method on Entities and call that method by iteration
+		//displayAllCourses("\n\n=======================Custom Find deleteByName = java :", courseSpringDataRepository.deleteByName("JAVA"));
+		//courseSpringDataRepository.flush();
+		
+		// 3 ways to write the custom query with @Query, JPQL query, Native query, NamedQuery
+		displayAllCourses(" Result of getAllSpringCoreCourses  :", courseSpringDataRepository.getAllSpringCoreCourses());
+		displayAllCourses(" Result of getAllJavaCourses  :", courseSpringDataRepository.getAllJavaCourses());
+		displayAllCourses(" Result of getAllSpringMVCCourses  :", courseSpringDataRepository.getAllSpringMVCCourses());
 		 
 		displayAllCourses();
 	}
